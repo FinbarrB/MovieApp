@@ -6,18 +6,19 @@ import { environment } from 'src/environments/environment';
 import { CommonModule, NgForOf } from '@angular/common';
 import { MyDataService } from '../services/my-data';
 import { Router } from '@angular/router';
+import { Routes } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  imports: [IonCardContent, IonCardSubtitle, IonCardTitle, IonCardHeader, IonHeader, IonToolbar, IonTitle, IonContent, IonSearchbar, IonButton, IonList, IonItem, NgForOf, IonLabel, IonCard],
+  imports: [IonCardContent, IonCardSubtitle, IonCardTitle, IonCardHeader, IonHeader, IonToolbar, IonTitle, IonContent, IonSearchbar, IonButton, IonList, IonItem, NgForOf, IonLabel, IonCard, FormsModule],
 })
 export class HomePage {
 
   trendingMovies!:any;
   keyword: string = "";
-  imageUrl: string = "";
 
   options: HttpOptions = {
     url: "https://api.themoviedb.org/3/trending/movie/day?language=en-US",
@@ -38,13 +39,17 @@ export class HomePage {
     this.trendingMovies = result.data.results
   }
 
-  async openMovies() {
+  async searchMovies() {
     //if button selected without search term, how to return to trending movies?
     await this.ds.set("kw", this.keyword);
-      if (this.keyword == "") {
-        this.router.navigate(['/home']);
-      } else {
-        this.router.navigate(['/movies']);
-      }
+    if (this.keyword == "") {
+      this.router.navigate(['home']);
+    } else {
+      this.router.navigate(['movies']);
+    }
+  }
+
+  getMovieDetails() {
+    this.router.navigate(['movie-details'])
   }
 }
