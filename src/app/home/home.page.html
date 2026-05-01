@@ -13,6 +13,11 @@
     </ion-toolbar>
   </ion-header>
   <ion-searchbar placeholder="Movie Name"></ion-searchbar>
-  <ion-button expand="full">Search</ion-button>
+  <ion-button expand="full" (click)="openMovies()">Search</ion-button>
   <h4>Today's Trending Movies</h4>
+  <ion-list>
+    <ion-item *ngFor="let movie of trendingMovies">
+      <ion-label>{{movie.title}}</ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>
