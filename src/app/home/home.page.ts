@@ -1,21 +1,23 @@
 import { Component } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonSearchbar, IonButton, IonList, IonItem, IonLabel } from '@ionic/angular/standalone';
+import { IonHeader, IonToolbar, IonTitle, IonContent, IonSearchbar, IonButton, IonList, IonItem, IonLabel, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent } from '@ionic/angular/standalone';
 import { MyHttpService } from '../services/my-http'
 import { HttpOptions } from '@capacitor/core';
 import { environment } from 'src/environments/environment';
 import { CommonModule, NgForOf } from '@angular/common';
 import { MyDataService } from '../services/my-data';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonSearchbar, IonButton, IonList, IonItem, NgForOf, IonLabel],
+  imports: [IonCardContent, IonCardSubtitle, IonCardTitle, IonCardHeader, IonHeader, IonToolbar, IonTitle, IonContent, IonSearchbar, IonButton, IonList, IonItem, NgForOf, IonLabel, IonCard],
 })
 export class HomePage {
 
-  trendingMovies: any[] = []
-  keyword: string = ""
+  trendingMovies!:any;
+  keyword: string = "";
+  imageUrl: string = "";
 
   options: HttpOptions = {
     url: "https://api.themoviedb.org/3/trending/movie/day?language=en-US",
@@ -25,20 +27,24 @@ export class HomePage {
     }
   }
 
-  constructor(private mhs:MyHttpService, private ds:MyDataService) {}
+  constructor(private mhs:MyHttpService, private ds:MyDataService, private router:Router) {}
 
   ngOnInit() {
     this.getTrendingMovies();
   }
 
   async getTrendingMovies() {
-    var result = await this.mhs.get(this.options)
-    this.trendingMovies = result.data
-    console.log(this.trendingMovies)
+    let result = await this.mhs.get(this.options)
+    this.trendingMovies = result.data.results
   }
 
-  openMovies() {
-    this.ds.set("kw", this.keyword);
+  async openMovies() {
+    //if button selected without search term, how to return to trending movies?
+    await this.ds.set("kw", this.keyword);
+      if (this.keyword == "") {
+        this.router.navigate(['/home']);
+      } else {
+        this.router.navigate(['/movies']);
+      }
   }
-
 }

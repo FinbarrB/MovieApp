@@ -15,9 +15,15 @@
   <ion-searchbar placeholder="Movie Name"></ion-searchbar>
   <ion-button expand="full" (click)="openMovies()">Search</ion-button>
   <h4>Today's Trending Movies</h4>
-  <ion-list>
-    <ion-item *ngFor="let movie of trendingMovies">
-      <ion-label>{{movie.title}}</ion-label>
-    </ion-item>
-  </ion-list>
+  <ion-card *ngFor="let movie of trendingMovies">
+    <img alt="{{movie.title}}" src="http://image.tmdb.org/t/p/w185/{{movie.poster_path}}" />
+    <ion-card-header>
+      <ion-card-title>{{movie.title}}</ion-card-title>
+      <ion-card-subtitle>{{movie.adult}}</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      {{movie.overview}}
+    </ion-card-content>
+  </ion-card>
 </ion-content>
